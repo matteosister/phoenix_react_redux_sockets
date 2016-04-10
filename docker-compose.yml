@@ -1,0 +1,16 @@
+web:
+  image: matteosister/phoenix:1.0.1
+  volumes:
+    - .:/code
+  working_dir: /code
+  ports:
+    - 4000:4000
+    - 8000:8000
+  links:
+    - db
+
+db:
+  image: postgres:9
+  environment:
+    POSTGRES_USER: "react_redux_list"
+    POSTGRES_PASSWORD: "react_redux_list"
