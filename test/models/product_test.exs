@@ -3,7 +3,7 @@ defmodule ReactReduxList.ProductTest do
 
   alias ReactReduxList.Product
 
-  @valid_attrs %{name: "some content", qty: 42}
+  @valid_attrs %{name: "some content", qty: 42, sort_order: 1}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

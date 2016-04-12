@@ -28,32 +28,31 @@ defmodule ReactReduxList.ProductChannel do
   end
 
   def handle_in("inc_product_qty", %{"product_id" => id}, socket) do
-    product = Repo.get!(Product, id)
-    params = %{:qty => product.qty + 1}
-    changeset = Product.changeset(product, params)
-    case Repo.update(changeset) do
-      {:ok, product} -> broadcast socket, "product_updates", render_one(product)
-      {:error, error} -> raise "error!"
+    spawn fn ->
+      update_product id, &(%{:qty => &1.qty + 1}), socket
     end
     {:noreply, socket}
   end
 
   def handle_in("dec_product_qty", %{"product_id" => id}, socket) do
+    spawn fn ->
+      update_product id, &(%{:qty => &1.qty - 1}), socket
+    end
+    {:noreply, socket}
+  end
+
+  defp update_product(id, params_builder, socket) do
     product = Repo.get!(Product, id)
-    params = %{:qty => product.qty - 1}
+    params = params_builder.(product)
     changeset = Product.changeset(product, params)
     case Repo.update(changeset) do
       {:ok, product} -> broadcast socket, "product_updates", render_one(product)
       {:error, error} -> raise "error!"
     end
-    {:noreply, socket}
   end
 
-  # It is also common to receive messages from the client and
-  # broadcast to everyone in the current topic (products:all).
   def handle_info(:after_connect, socket) do
-    products = Product
-    |> Repo.all
+    products = Product.ordered
     |> render_many
 
     broadcast socket, "set_products", products

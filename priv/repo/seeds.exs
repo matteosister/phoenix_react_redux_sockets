@@ -13,8 +13,8 @@
 defmodule Seeds do
   alias ReactReduxList.Product
 
-  def create_product do
-    %Product{name: "name #{ random_number }", qty: random_number(1..5)}
+  def create_product(order) do
+    %Product{name: "name #{ random_number }", qty: random_number(1..5), sort_order: order}
   end
 
   def delete_all do
@@ -27,8 +27,8 @@ defmodule Seeds do
 end
 
 Seeds.delete_all
-ReactReduxList.Repo.insert!(Seeds.create_product)
-ReactReduxList.Repo.insert!(Seeds.create_product)
-ReactReduxList.Repo.insert!(Seeds.create_product)
-ReactReduxList.Repo.insert!(Seeds.create_product)
-ReactReduxList.Repo.insert!(Seeds.create_product)
+ReactReduxList.Repo.insert!(Seeds.create_product(1))
+ReactReduxList.Repo.insert!(Seeds.create_product(2))
+ReactReduxList.Repo.insert!(Seeds.create_product(3))
+ReactReduxList.Repo.insert!(Seeds.create_product(4))
+ReactReduxList.Repo.insert!(Seeds.create_product(5))
