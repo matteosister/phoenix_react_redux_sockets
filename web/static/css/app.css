@@ -1,0 +1,9 @@
+.loading {
+  background-color: #CCC;
+}
+.qty.number {
+  width: 50%;
+  float: left;
+  font-weight: bold;
+  font-size: 20px;
+}

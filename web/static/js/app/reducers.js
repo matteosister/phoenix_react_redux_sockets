@@ -10,6 +10,17 @@ export function getProducts(state) {
   return state.get("products")
 }
 
+function addLoadingTo(products, id) {
+  return Immutable.List(_.map(products, (storeProduct) => {
+    if (storeProduct.id === id) {
+      storeProduct.loading = true
+    } else {
+      storeProduct.loading = false
+    }
+    return storeProduct
+  }))
+}
+
 export default function shoppingListApp(state = initialState, action) {
   switch (action.type) {
     case RECEIVED_PRODUCTS:
@@ -22,6 +33,10 @@ export default function shoppingListApp(state = initialState, action) {
           : storeProduct
       })
       return state.set('products', Immutable.List(newProducts))
+    case INCREASE_PRODUCT_QUANTITY:
+      return state.set('products', addLoadingTo(state.get('products').toArray(), action.payload))
+    case DECREASE_PRODUCT_QUANTITY:
+      return state.set('products', addLoadingTo(state.get('products').toArray(), action.payload))
     default:
       return state
   }
